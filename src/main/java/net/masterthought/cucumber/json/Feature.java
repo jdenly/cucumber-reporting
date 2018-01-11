@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vladsch.flexmark.ast.Node;
+import net.masterthought.cucumber.ReportBuilder;
 import org.apache.commons.lang.StringUtils;
 
 import net.masterthought.cucumber.Configuration;
@@ -74,7 +76,8 @@ public class Feature implements Reportable, Durationable {
     }
 
     public String getDescription() {
-        return StringUtils.defaultString(description);
+        Node document = ReportBuilder.parser.parse(StringUtils.defaultString(description));
+        return ReportBuilder.renderer.render(document);
     }
 
     @Override

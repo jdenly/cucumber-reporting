@@ -1,5 +1,7 @@
 package net.masterthought.cucumber.json;
 
+import com.vladsch.flexmark.ast.Node;
+import net.masterthought.cucumber.ReportBuilder;
 import org.apache.commons.lang.StringUtils;
 
 import net.masterthought.cucumber.json.support.Durationable;
@@ -75,7 +77,8 @@ public class Element implements Durationable {
     }
 
     public String getDescription() {
-        return StringUtils.defaultString(description);
+        Node document = ReportBuilder.parser.parse(StringUtils.defaultString(description));
+        return ReportBuilder.renderer.render(document);
     }
 
     public boolean isScenario() {

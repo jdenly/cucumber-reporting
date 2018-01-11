@@ -22,7 +22,8 @@
       <div class="feature">
         #includeTags($feature.getTags())
         #includeBrief($feature.getKeyword(), $feature.getStatus(), $feature.getName())
-        <div class="description indention">$feature.getDescription()</div>
+        #set($featureDescriptionWithHtml = $feature.getDescription())
+        <div class="description indention">$featureDescriptionWithHtml</div>
 
         <div class="elements inner-level">
           #foreach($element in $feature.getElements())

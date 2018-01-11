@@ -23,6 +23,8 @@ final class EscapeHtmlReference implements ReferenceInsertionEventHandler {
             return null;
         } else if(reference.startsWith("$_sanitize_")) {
             return LINKS.sanitize(value.toString());
+        } else if(reference.endsWith("WithHtml")) {
+            return value.toString();
         } else {
             return StringEscapeUtils.escapeHtml(value.toString());
         }

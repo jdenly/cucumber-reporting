@@ -1,34 +1,25 @@
 package net.masterthought.cucumber;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
+import net.masterthought.cucumber.generators.*;
+import net.masterthought.cucumber.json.Feature;
+import net.masterthought.cucumber.json.support.TagObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.masterthought.cucumber.generators.ErrorPage;
-import net.masterthought.cucumber.generators.FailuresOverviewPage;
-import net.masterthought.cucumber.generators.FeatureReportPage;
-import net.masterthought.cucumber.generators.FeaturesOverviewPage;
-import net.masterthought.cucumber.generators.StepsOverviewPage;
-import net.masterthought.cucumber.generators.TagReportPage;
-import net.masterthought.cucumber.generators.TagsOverviewPage;
-import net.masterthought.cucumber.generators.TrendsOverviewPage;
-import net.masterthought.cucumber.json.Feature;
-import net.masterthought.cucumber.json.support.TagObject;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReportBuilder {
 
@@ -59,6 +50,25 @@ public class ReportBuilder {
      * to mark that the build crashed.
      */
     private boolean wasTrendsFileSaved = false;
+
+    public static Parser parser;
+    public static HtmlRenderer renderer;
+
+    static {
+        MutableDataSet options = new MutableDataSet();
+
+        // add "table" as a class to all tables
+        options.set(TablesExtension.CLASS_NAME, "table");
+
+        // allow tables and strikethrough
+        options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
+
+        // escape all HTML
+        options.set(HtmlRenderer.ESCAPE_HTML, true);
+
+        parser = Parser.builder(options).build();
+        renderer = HtmlRenderer.builder(options).build();
+    }
 
     public ReportBuilder(List<String> jsonFiles, Configuration configuration) {
         this.jsonFiles = jsonFiles;
