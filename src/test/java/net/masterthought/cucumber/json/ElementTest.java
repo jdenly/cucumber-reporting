@@ -204,7 +204,7 @@ public class ElementTest extends PageTest {
         String description = element.getDescription();
 
         // then
-        assertThat(description).isEqualTo("Account holder withdraws more cash");
+        assertThat(description).isEqualTo("<p>Account holder withdraws more cash</p>\n");
     }
 
     @Test

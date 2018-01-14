@@ -94,7 +94,7 @@ public class FeatureReportPageIntegrationTest extends PageTest {
         assertThat(tags).hasSize(1);
         tags[0].getLink().hasLabelAndAddress("@featureTag", "report-tag_featureTag.html");
 
-        assertThat(featureDetails.getDescription()).isEqualTo(feature.getDescription());
+        assertThat(featureDetails.getDescription()).isEqualTo(removeParagraphTags(feature.getDescription()));
     }
 
     @Test
@@ -128,7 +128,7 @@ public class FeatureReportPageIntegrationTest extends PageTest {
         assertThat(brief.getName()).isEqualTo(scenario.getName());
         brief.hasStatus(scenario.getStatus());
 
-        assertThat(firstElement.getDescription()).isEqualTo(scenario.getDescription());
+        assertThat(firstElement.getDescription()).isEqualTo(removeParagraphTags(scenario.getDescription()));
     }
 
     @Test
@@ -376,5 +376,9 @@ public class FeatureReportPageIntegrationTest extends PageTest {
     private void asserEmbeddingFileExist(Embedding embedding) {
         File file = new File(configuration.getEmbeddingDirectory(), embedding.getFileName());
         assertThat(file).exists();
+    }
+
+    private String removeParagraphTags(String description) {
+        return description.replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("\n", "");
     }
 }

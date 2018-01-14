@@ -150,7 +150,7 @@ public class FeatureTest extends PageTest {
         String description = feature.getDescription();
 
         // then
-        assertThat(description).isEqualTo("This is description of the feature");
+        assertThat(description).isEqualTo("<p>This is description of the feature</p>\n");
     }
 
     @Test
